@@ -3,6 +3,7 @@ package br.com.fiap.controller;
 import br.com.fiap.model.Produto;
 import br.com.fiap.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,19 +16,23 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
+    public ProdutoController(ProdutoService produtoService) {
+        this.produtoService = produtoService;
+    }
+
     @GetMapping
     public List<Produto> listarProdutos() {
-        return produtoService.listarProduto();
+        return produtoService.listarProdutos();
     }
 
     @PostMapping
-    public Produto cadastrarProduto(@RequestBody Produto produto) {
-        return produtoService.cadastrarProduto(produto);
+    public ResponseEntity<Produto> cadastrarProduto(@RequestBody Produto produto) {
+        return new ResponseEntity<>(produtoService.cadastrarProduto(produto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{produtoId}")
-    public ResponseEntity<?> listarUmProduto(@PathVariable Integer produtoId) {
-        return produtoService.listarUmProduto(produtoId);
+    public ResponseEntity<?> obterProduto(@PathVariable Integer produtoId) {
+        return produtoService.obterProduto(produtoId);
     }
 
     @PutMapping("/{produtoId}")

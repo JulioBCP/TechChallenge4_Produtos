@@ -16,7 +16,11 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public List<Produto> listarProduto() {
+    public ProdutoService(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
+    }
+
+    public List<Produto> listarProdutos() {
         return produtoRepository.findAll();
     }
 
@@ -24,7 +28,7 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public ResponseEntity<?> listarUmProduto(Integer produtoId) {
+    public ResponseEntity<?> obterProduto(Integer produtoId) {
         Produto produto = produtoRepository.findById(produtoId).orElse(null);
 
         if (produto != null) {
@@ -53,7 +57,7 @@ public class ProdutoService {
         Produto produtoExistente = produtoRepository.findById(produtoId).orElse(null);
 
         if (produtoExistente != null) {
-            produtoRepository.delete(produtoExistente);
+            produtoRepository.deleteById(produtoId);
         } else {
             throw new NoSuchElementException("Produto nao encontrado");
         }
